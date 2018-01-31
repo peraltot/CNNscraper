@@ -1,9 +1,7 @@
 body {
   background-image: url("/assets/images/searchBackground.jpg");
-  /* background-size: fill; */
   background-repeat: repeat;
   display: flex;
-  /* min-height: 100vh; */
   flex-direction: column;
   color: black;
   box-sizing: border-box;
