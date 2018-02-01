@@ -43,8 +43,9 @@ $.getJSON("/saved", function (data) {
         "</div>" +
         "<div class = 'col s3'>" + "<a data-id='" + data[i]._id + "' class='note waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "' href='#modal" + data[i]._id + "'>Add a Note</a>" + "<div id='modal" + data[i]._id + "' class='modal'>" +
         "<div class='modal-content'>" + "<h4>Notes For Article: " + data[i].title + "<h4>" + "<div class='row'>" + "<form class='col s12'>" + "<div class='row'>" + "<div class='input-field col s12'>" + "<textarea id='title" + data[i]._id + "' name='title' class='materialize-textarea'></textarea>" + "<label for='titleInput'>Title</label>" + "</div>" + "<div class='input-field col s12'>" + "<textarea id='body" + data[i]._id + "' name='body' class='materialize-textarea'></textarea>" + "<label for='bodyInput'>Enter Note</label>" + "</div>" + "</div>" +
-        "</form>" + "</div>" + "</div>" + "<div class='modal-footer'>" + "<a data-id='" + data[i]._id + "' href='#!' id='savenote' class='modal-action modal-close waves-effect waves-green btn-flat'>Save Note</a>" + "</div>" + "</div>");
-    }
+        "</form>" + "</div>" + "</div>" + "<div class='modal-footer'>" + "<a data-id='" + data[i]._id + "' href='#!' id='savenote' class='modal-action modal-close waves-effect waves-green btn-flat'>Save Note</a>" + "<a data-id='" + data[i]._id + "' href='#!' id='deletenote' class='modal-action modal-close waves-effect waves-green btn-flat'>Delete Note</a>" + "</div>" + "</div>");
+    
+      }
   } else {
     var noArticles = $("#savedArticles").append("<h3>UH OH! Looks like we don't have any articles.</h3>");
   }
@@ -115,6 +116,34 @@ $(document).on("click", "#savenote", function () {
     });
 
   });
+
+  // When you click the deletenote button
+$(document).on("click", "#deletenote", function () {
+  var thisId = $(this).attr("data-id");
+ console.log("Data-Id: " + thisId);
+ console.log("Data: " + $("#title" + thisId).val());
+ console.log("Data: " + $("#body" + thisId).val());
+
+ // Run a DELETE request to change the note, using what's entered in the inputs
+ $.ajax({
+  url: "/savedArticles/" + thisId,
+  type: 'post',
+  data: {_method: 'delete'}
+  //  method: "POST",
+  //  data: {
+  //    // Value taken from title input
+  //    title: $("#title" + thisId).val(),
+  //    // Value taken from note textarea
+  //    body: $("#body" + thisId).val()
+  //  }
+ })
+  
+   .done(function (data) {
+     // Log the response
+   
+   });
+
+ });
 
 $(document).on("click", ".savedArticlesButton", function () {
 
