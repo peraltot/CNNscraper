@@ -13,6 +13,7 @@ var ArticleSchema = new Schema({
   // link is a required string
   link: {
     type: String,
+    // type: Schema.Types.Url,
     required: true
   },
   // This only saves one note's ObjectId, ref refers to the Note model
