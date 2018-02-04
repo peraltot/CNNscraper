@@ -87,6 +87,28 @@ app.post("/saved:id", function (req, res) {
 
 });
 
+app.post("/delete/:id", function (req, res) {
+    // Create a new saved and pass the req.body to the entry
+    
+            // Use the article id to find and update it's note
+            Article.findOneAndUpdate({
+                "_id": req.params.id
+            }, { "saved": false })
+                // Execute the above query
+                .exec(function (err, doc) {
+                    // Log any errors
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        // Or send the document to the browser
+                        console.log("deleted the article");
+                        res.send(doc);
+                    }
+                });
+        }
+
+);
+
 
 // A GET request to scrape the echojs website
 app.get("/scrape", function (req, res) {

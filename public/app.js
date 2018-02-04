@@ -41,8 +41,8 @@ $.getJSON("/saved", function (data) {
       $("#savedArticles").append("<div class = 'col s9'>" +
         "<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />'" + data[i].link + "'</p>" +
         "</div>" +
-        "<div class = 'col s3'>" + "<a data-id='" + data[i]._id + "' class='note waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "' href='#modal" + data[i]._id + "'>Add a Note</a>"+ "<a data-id='" + data[i]._id + "' class='delete waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "'>Delete Article</a>" + "<div id='modal" + data[i]._id + "' class='modal'>" +
         // "<div class = 'col s3'>" + "<a data-id='" + data[i]._id + "' class='note waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "' href='#modal" + data[i]._id + "'>Add a Note</a>"+ "<a data-id='" + data[i]._id + "' class='delete waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "'>Delete Article</a>" + "<div id='modal" + data[i]._id + "' class='modal'>" +
+        "<div class = 'col s3'>" + "<a data-id='" + data[i]._id + "' class='note waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "' href='#modal" + data[i]._id + "'>Add a Note</a>"+ "<button class='delete waves-effect waves-light btn blue' id='" + data[i]._id + "'>Delete Article</button>" + "<div id='modal" + data[i]._id + "' class='modal'>" +
         "<div class='modal-content'>" + "<h4>Notes For Article: " + data[i].title + "<h4>" + "<div class='row'>" + "<form class='col s12'>" + "<div class='row'>" + "<div class='input-field col s12'>" + "<textarea id='title" + data[i]._id + "' name='title' class='materialize-textarea'></textarea>" + "<label for='titleInput'>Title</label>" + "</div>" + "<div class='input-field col s12'>" + "<textarea id='body" + data[i]._id + "' name='body' class='materialize-textarea'></textarea>" + "<label for='bodyInput'>Enter Note</label>" + "</div>" + "</div>" +
         "</form>" + "</div>" + "</div>" + "<div class='modal-footer'>" + "<a data-id='" + data[i]._id + "' href='#!' id='savenote' class='modal-action modal-close waves-effect waves-green btn-flat'>Save Note</a>" + "<a data-id='" + data[i]._id + "' href='#!' id='deletenote' class='modal-action modal-close waves-effect waves-green btn-flat'>Delete Note</a>" + "</div>" + "</div>");
     
@@ -64,19 +64,25 @@ $(document).on("click", ".save", function () {
 });
 
 $(document).on("click", ".delete", function () {
-  var thisId = $(this).attr("id");
-  $.ajax({
-    url: "/saved" + thisId,
-    type: 'post',
-    data: {_method: 'delete'}
-  })
   
-   .done(function (data) {
-     // Log the response
+  var thisId = $(this).attr("id");
+  // db.articles.update( {$set: {"saved":false}})
+  $.ajax({
+    method: "POST",
+    url: "/delete/" + thisId,
+    data: {_method: 'set',
+      // set value to false
+      // $set:{"saved": false}
+      saved: false
+     }
+  })
    
-   });
+    .done(function (data) {
+      // Log the response
+    
+    });
 
- });
+  });
 // Whenever someone clicks a p tag
 $(document).on("click", ".note", function () {
 
