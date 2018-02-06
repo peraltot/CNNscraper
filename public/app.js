@@ -25,8 +25,10 @@ $.getJSON("/articles", function (data) {
     for (var i = 0; i < data.length; i++) {
       // Display the apropos information on the page
       $("#articles").append("<div class = 'col s9'>" +
-        "<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />'https://www.cnn.com/articles" + data[i].link + "'</p>" + "</div>" + "<div class = 'col s3'>" + "<button class='save waves-effect waves-light btn blue' id='" + data[i]._id + "'>Save Article</button>" + "</div>");
-    }
+        // "<p data-id='" + data[i]._id + "'>" + data[i].title + "<br /><a href='" + data[i].link + "'>"+"https://www.cnn.com/articles" + data[i].link + "</a></p>" + "</div>" + "<div class = 'col s3'>" + "<button class='save waves-effect waves-light btn blue' id='" + data[i]._id + "'>Save Article</button>" + "</div>");
+        "<p data-id='" + data[i]._id + "'>" + data[i].title + "<br /><a href='https://www.cnn.com" + data[i].link + "'>"+"https://www.cnn.com/articles" + data[i].link + "</a></p>" + "</div>" + "<div class = 'col s3'>" + "<button class='save waves-effect waves-light btn blue' id='" + data[i]._id + "'>Save Article</button>" + "</div>");
+        
+      }
   } else {
     var noArticles = $("#articles").append("<h3>UH OH! Looks like we don't have any articles.</h3>");
   }
@@ -39,7 +41,7 @@ $.getJSON("/saved", function (data) {
     for (var i = 0; i < data.length; i++) {
       // Display the apropos information on the page
       $("#savedArticles").append("<div class = 'col s9'>" +
-        "<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />'https://www.cnn.com/articles" + data[i].link + "'</p>" +
+        "<p data-id='" + data[i]._id + "'>" + data[i].title + "<br /><a href='https://www.cnn.com" + data[i].link + "'>"+"https://www.cnn.com/articles" + data[i].link + "</a></p>" +
         "</div>" +
         // "<div class = 'col s3'>" + "<a data-id='" + data[i]._id + "' class='note waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "' href='#modal" + data[i]._id + "'>Add a Note</a>"+ "<a data-id='" + data[i]._id + "' class='delete waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "'>Delete Article</a>" + "<div id='modal" + data[i]._id + "' class='modal'>" +
         "<div class = 'col s3'>" + "<a data-id='" + data[i]._id + "' class='note waves-effect waves-light btn modal-trigger center blue' id='" + data[i]._id + "' href='#modal" + data[i]._id + "'>Add a Note</a>"+ "<br/>" +"<button class='delete waves-effect waves-light btn blue' id='" + data[i]._id + "'>Delete Article</button>" + "<div id='modal" + data[i]._id + "' class='modal'>" +
