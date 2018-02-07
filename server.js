@@ -1,38 +1,30 @@
-/* Showing Mongoose's "Populated" Method
- * =============================================== */
-
 // Dependencies
 var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-// Requiring our Note and Article models
 var Note = require("./models/Note.js");
 var Article = require("./models/Article.js");
 var Saved = require("./models/Saved.js");
-// Our scraping tools
 var request = require("request");
 var cheerio = require("cheerio");
 
 var path = require("path");
-// Set mongoose to leverage built in JavaScript ES6 Promises
+
 mongoose.Promise = Promise;
 
 var port = process.env.PORT || 3000;
 
-// Initialize Express
 var app = express();
 
-// Use morgan and body parser with our app
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
-
-// Make public a static dir
 app.use(express.static("public"));
 
 var port = process.env.PORT || 3000;
 
 // Database configuration with mongoose
+// ======
 var databaseUri = "mongodb://localhost/CNNscraper";
 
 if (process.env.MONGODB_URI) {
@@ -43,12 +35,10 @@ if (process.env.MONGODB_URI) {
 
 var db = mongoose.connection;
 
-// Show any mongoose errors
 db.on("error", function (error) {
     console.log("Mongoose Error: ", error);
 });
 
-// Once logged in to the db through mongoose, log a success message
 db.once("open", function () {
     console.log("Mongoose connection successful.");
 });
@@ -88,33 +78,32 @@ app.post("/saved:id", function (req, res) {
 });
 
 app.post("/delete/:id", function (req, res) {
-    // Create a new saved and pass the req.body to the entry
-    
-            // Use the article id to find and update it's note
-            Article.findOneAndUpdate({
-                "_id": req.params.id
-            }, { "saved": false })
-                // Execute the above query
-                .exec(function (err, doc) {
-                    // Log any errors
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        // Or send the document to the browser
-                        console.log("deleted the article");
-                        res.send(doc);
-                    }
-                });
-        }
+    // Delete or remove a saved article
+
+    // Use the article id to find and update it's saved property
+    Article.findOneAndUpdate({
+        "_id": req.params.id
+    }, { "saved": false })
+        // Execute the above query
+        .exec(function (err, doc) {
+            // Log any errors
+            if (err) {
+                console.log(err);
+            } else {
+                // Or send the document to the browser
+                console.log("deleted the article");
+                res.send(doc);
+            }
+        });
+}
 
 );
 
 
 // A GET request to scrape the echojs website
 app.get("/scrape", function (req, res) {
-   
+
     request("https://www.cnn.com/articles/", function (error, response, html) {
-        // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(html);
         $("h3.cd__headline").each(function (i, element) {
             // Save an empty result object
@@ -125,15 +114,14 @@ app.get("/scrape", function (req, res) {
             result.link = $(this).children().attr("href");
             result.saved = false;
 
-            // Using our Article model, create a new entry
-            // This effectively passes the result object to the entry (and the title and link)
+            // Passes the result object to the entry (and the title and link)
             var entry = new Article(result);
 
             // Now, save that entry to the db
             entry.save(function (err, doc) {
                 // Log any errors
                 if (err) {
-                    console.log(err // Or log the doc
+                    console.log(err
                     );
                 } else {
 
@@ -181,15 +169,12 @@ app.get("/saved", function (req, res) {
 // Grab an article by it's ObjectId
 app.get("/savedArticles/:id", function (req, res) {
     console.log("Req.params.id: " + req.params.id);
-    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
     Article.findOne({ "_id": req.params.id })
-        // ..and populate all of the notes associated with it
         .populate("note")
-        // now, execute our query
         .exec(function (error, doc) {
             // Log any errors
             if (error) {
-                console.log(error // Otherwise, send the doc to the browser as a json object
+                console.log(error 
                 );
             } else {
                 res.json(doc);
@@ -199,7 +184,6 @@ app.get("/savedArticles/:id", function (req, res) {
 
 // Create a new note or replace an existing note
 app.post("/savedArticles/:id", function (req, res) {
-    // Create a new note and pass the req.body to the entry
     var newNote = new Note(req.body);
 
     // And save the new note the db
@@ -219,7 +203,6 @@ app.post("/savedArticles/:id", function (req, res) {
                     if (err) {
                         console.log(err);
                     } else {
-                        // Or send the document to the browser
                         res.send(doc);
                     }
                 });
@@ -231,7 +214,6 @@ app.get("/savedArticles", function (req, res) {
     res.sendFile(path.join(__dirname, "./public/savedArticles.html"));
 });
 
-// Listen on port 3000
 app.listen(port, function () {
     console.log("App running on port 3000 !");
 });
