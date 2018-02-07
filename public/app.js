@@ -48,7 +48,7 @@ $.getJSON("/saved", function (data) {
 
     }
   } else {
-    var noArticles = $("#savedArticles").append("<h3>UH OH! Looks like we don't have any articles.</h3>");
+    var noArticles = $("#savedArticles").append("<h3>Whoops, there's nothing saved?.</h3>");
   }
 });
 
