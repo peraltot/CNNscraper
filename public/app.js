@@ -29,7 +29,7 @@ $.getJSON("/articles", function (data) {
 
     }
   } else {
-    var noArticles = $("#articles").append("<h3>UH OH! Looks like we don't have any articles.</h3>");
+    var noArticles = $("#articles").append("<h3>Oops, whah happened, no articles!!</h3>");
   }
 });
 
