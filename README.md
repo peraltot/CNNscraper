@@ -31,8 +31,10 @@ Then install the for command line interaction.
 
 ## Run
 
-To run the game execute the following command:
+To run the application locally execute the following command:
 
 	node server.js
+    and 
+    mongod in another terminal first
 	
 **Enjoy!**
